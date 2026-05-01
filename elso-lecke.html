@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Első lecke — Hungarian First Lesson</title>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { min-height: 100vh; }
+  body {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    color: #2A1810;
+    background-color: #FAF5EF;
+    background-image:
+      radial-gradient(at 20% 0%, rgba(232, 213, 196, 0.35) 0px, transparent 50%),
+      radial-gradient(at 95% 100%, rgba(220, 198, 180, 0.25) 0px, transparent 50%);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .grain { position: relative; }
+  .grain::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' /%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+    opacity: 0.05; pointer-events: none; mix-blend-mode: multiply; z-index: 0;
+  }
+  .font-display { font-family: 'Fraunces', 'Times New Roman', serif; letter-spacing: -0.02em; }
+  .container { max-width: 880px; margin: 0 auto; padding: 56px 32px; position: relative; z-index: 1; }
+  @media (max-width: 640px) { .container { padding: 40px 20px; } }
+
+  /* HEADER */
+  .eyebrow { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.2em; color: #8B2C24; margin-bottom: 8px; }
+  .eyebrow svg { width: 14px; height: 14px; }
+  h1.title { font-family: 'Fraunces', serif; font-size: clamp(48px, 9vw, 88px); font-weight: 500; line-height: 0.95; color: #2A1810; }
+  .subtitle { font-style: italic; color: #5C4F42; margin-top: 12px; font-size: 16px; }
+
+  .tabs { margin-top: 32px; display: inline-flex; background: rgba(255,255,255,0.6); border: 1px solid #E8DCC8; border-radius: 999px; padding: 4px; }
+  .tab { background: transparent; border: none; cursor: pointer; padding: 9px 22px; border-radius: 999px; font-family: inherit; font-size: 14px; font-weight: 500; color: #2A1810; transition: all 0.2s; }
+  .tab:hover { background: rgba(232, 220, 200, 0.4); }
+  .tab.active { background: #2A1810; color: #FAF5EF; }
+
+  /* SECTIONS */
+  section.lesson-sec { margin-top: 56px; }
+  .sec-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px; }
+  .sec-num { font-family: 'Fraunces', serif; font-weight: 300; font-style: italic; font-size: 48px; color: #8B2C24; opacity: 0.8; line-height: 1; }
+  .sec-titles h2 { font-family: 'Fraunces', serif; font-size: clamp(28px, 4vw, 36px); font-weight: 500; color: #2A1810; line-height: 1.1; }
+  .sec-titles p { font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: #7A6B5C; margin-top: 4px; }
+  .divider { height: 14px; margin: 16px 0 24px; background-image: radial-gradient(circle, #8B2C24 1.5px, transparent 1.5px); background-size: 14px 14px; background-position: 0 50%; background-repeat: repeat-x; opacity: 0.5; }
+
+  /* GRID UTILS */
+  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .grid-cons { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  @media (max-width: 720px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    .grid-cons { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* CARDS */
+  .card { background: rgba(255,255,255,0.72); border: 1px solid #E8DCC8; border-radius: 12px; padding: 20px; transition: all 0.25s; }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 12px 32px -12px rgba(42, 24, 16, 0.18); }
+  .card-letter { font-family: 'Fraunces', serif; font-size: 36px; font-weight: 500; color: #8B2C24; margin-bottom: 8px; }
+  .card-desc { font-size: 14px; color: #5C4F42; font-style: italic; margin-bottom: 12px; }
+  .pills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill { font-size: 12px; background: rgba(251, 227, 214, 0.6); border: 1px solid rgba(232, 184, 154, 0.5); padding: 4px 10px; border-radius: 999px; }
+  .pill b { color: #2A1810; font-weight: 600; }
+  .pill span { color: #7A6B5C; }
+
+  .cons-card { text-align: center; padding: 14px; }
+  .cons-card .lbl { font-size: 11px; color: #5C4F42; line-height: 1.2; margin-top: 4px; }
+  .cons-card .ex { font-size: 12px; font-weight: 600; color: #2A1810; margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(232, 220, 200, 0.6); }
+  .cons-card .tr { font-size: 10px; font-style: italic; color: #7A6B5C; }
+
+  /* HARMONY */
+  .harmony-card { padding: 20px; border-radius: 12px; border: 1px solid; transition: all 0.25s; }
+  .harmony-card:hover { transform: translateY(-2px); box-shadow: 0 12px 32px -12px rgba(42, 24, 16, 0.18); }
+  .deep-pill { background: #FBE3D6; color: #7A3215; border-color: #E8B89A; }
+  .mixed-pill { background: #F5E1C8; color: #6B4423; border-color: #D9B591; }
+  .high-pill { background: #E8DEEA; color: #4A2D5C; border-color: #C9B6CD; }
+  .h-eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; opacity: 0.7; }
+  .h-mnem { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 500; margin: 4px 0 8px; }
+  .h-vowels { font-size: 14px; font-weight: 600; opacity: 0.9; margin-bottom: 12px; }
+  .h-words li { font-size: 14px; margin-bottom: 4px; list-style: none; }
+  .h-words b { font-weight: 600; }
+  .h-words em { opacity: 0.7; font-style: italic; }
+  .callout { margin-top: 20px; background: #FFFCF7; border-left: 4px solid #8B2C24; border-radius: 0 8px 8px 0; padding: 16px; font-size: 14px; }
+  .callout b { font-family: 'Fraunces', serif; font-weight: 500; font-size: 16px; }
+
+  /* LOCATIVE */
+  .loc-title { font-family: 'Fraunces', serif; font-size: 24px; color: #8B2C24; }
+  .loc-sub { font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: #7A6B5C; margin-top: 4px; }
+  .loc-list { list-style: none; margin-top: 12px; font-size: 14px; }
+  .loc-list li { margin-bottom: 6px; }
+  .loc-list b { color: #8B2C24; }
+
+  /* COLLAPSIBLE */
+  .collap { border-top: 1px solid #E8DCC8; padding: 12px 0; }
+  .collap button { width: 100%; display: flex; justify-content: space-between; align-items: center; background: none; border: none; cursor: pointer; font-family: inherit; font-size: 14px; font-weight: 500; color: #2A1810; padding: 0; text-align: left; }
+  .collap button svg { color: #8B2C24; width: 16px; height: 16px; }
+  .collap-body { margin-top: 12px; font-size: 14px; color: #5C4F42; animation: fadeUp 0.35s; }
+  .collap-body ul { margin-left: 16px; margin-top: 8px; }
+  .collap-body li { margin-bottom: 4px; }
+  .collap-body b { color: #8B2C24; }
+
+  /* TABLE */
+  .tbl-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  thead tr { border-bottom: 2px solid #2A1810; }
+  th { text-align: left; padding: 8px 12px; font-family: 'Fraunces', serif; font-weight: 500; color: #2A1810; }
+  th.muted { font-family: inherit; color: #7A6B5C; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; }
+  th.accent { color: #8B2C24; }
+  tbody tr { border-bottom: 1px solid #E8DCC8; }
+  td { padding: 10px 12px; }
+  td.bold { font-weight: 600; color: #8B2C24; }
+  .table-note { font-size: 12px; font-style: italic; color: #7A6B5C; margin-top: 12px; }
+  .table-note em { font-style: italic; }
+
+  /* FUNCTIONS */
+  .fn-card { padding: 16px; }
+  .fn-q { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 500; color: #8B2C24; }
+  .fn-en { font-size: 12px; color: #7A6B5C; font-style: italic; }
+  .fn-a { margin-top: 8px; padding-top: 8px; border-top: 1px solid #E8DCC8; font-size: 14px; color: #2A1810; }
+  .fn-a span { color: #7A6B5C; font-size: 12px; }
+
+  /* CTA */
+  .cta { border-top: 1px solid #E8DCC8; padding-top: 40px; margin-top: 56px; text-align: center; }
+  .cta-line { font-family: 'Fraunces', serif; font-size: 24px; color: #2A1810; margin-bottom: 16px; }
+  .cta-line span { font-family: 'DM Sans', sans-serif; font-style: italic; color: #7A6B5C; font-size: 16px; margin-left: 8px; }
+
+  .btn-primary { background: #8B2C24; color: #FAF5EF; border: none; padding: 13px 30px; border-radius: 999px; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+  .btn-primary:hover:not(:disabled) { background: #6B1F18; transform: translateY(-1px); box-shadow: 0 8px 24px -8px rgba(139, 44, 36, 0.4); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-ghost { border: 1.5px solid #2A1810; color: #2A1810; background: transparent; padding: 11px 24px; border-radius: 999px; font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+  .btn-ghost:hover { background: #2A1810; color: #FAF5EF; }
+
+  /* QUIZ */
+  .quiz-box { background: rgba(255,255,255,0.72); border: 1px solid #E8DCC8; border-radius: 16px; padding: 32px; margin-top: 16px; }
+  @media (max-width: 640px) { .quiz-box { padding: 24px; } }
+  .quiz-meta { display: flex; justify-content: space-between; align-items: center; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: #7A6B5C; margin-bottom: 24px; }
+  .quiz-meta b { color: #8B2C24; font-weight: 600; }
+  .progress { width: 100%; height: 4px; background: #E8DCC8; border-radius: 999px; overflow: hidden; margin-bottom: 32px; }
+  .progress-bar { height: 100%; background: #8B2C24; transition: width 0.5s; }
+  .quiz-q { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 500; color: #2A1810; line-height: 1.3; margin-bottom: 24px; }
+
+  .opts { display: flex; flex-direction: column; gap: 10px; }
+  .opt { width: 100%; text-align: left; padding: 14px 20px; border-radius: 10px; border: 1.5px solid #D9CBB8; background: #FFFCF7; font-family: inherit; font-size: 16px; color: #2A1810; cursor: pointer; transition: all 0.15s; display: flex; justify-content: space-between; align-items: center; }
+  .opt:hover:not(:disabled) { border-color: #8B2C24; transform: translateX(2px); }
+  .opt:disabled { cursor: not-allowed; }
+  .opt.selected { border-color: #8B2C24; }
+  .opt.correct { border-color: #047857; background: #ECFDF5; }
+  .opt.wrong { border-color: #B91C1C; background: #FEF2F2; }
+  .opt.dim { opacity: 0.5; }
+
+  .fill-input { width: 100%; padding: 14px 20px; border-radius: 10px; border: 1.5px solid #D9CBB8; background: #FFFCF7; font-family: inherit; font-size: 18px; color: #2A1810; outline: none; transition: border-color 0.15s; }
+  .fill-input:focus { border-color: #8B2C24; }
+  .fill-input.correct { border-color: #047857; color: #065F46; }
+  .fill-input.wrong { border-color: #B91C1C; color: #991B1B; }
+  .hint { font-size: 12px; color: #7A6B5C; font-style: italic; margin-top: 8px; }
+
+  .feedback { margin-top: 20px; border-radius: 10px; padding: 16px; border-left: 4px solid; animation: fadeUp 0.35s; display: flex; gap: 10px; }
+  .feedback.ok { background: #ECFDF5; border-color: #047857; }
+  .feedback.no { background: #FEF2F2; border-color: #B91C1C; }
+  .feedback svg { flex-shrink: 0; margin-top: 2px; }
+  .feedback .ttl { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 500; }
+  .feedback.ok .ttl { color: #065F46; }
+  .feedback.no .ttl { color: #991B1B; }
+  .feedback .exp { font-size: 14px; color: #2A1810; margin-top: 4px; }
+
+  .quiz-actions { margin-top: 24px; display: flex; justify-content: flex-end; }
+
+  .results { text-align: center; padding: 40px 0; animation: fadeUp 0.4s; }
+  .results svg { color: #8B2C24; margin-bottom: 16px; }
+  .results-score { font-family: 'Fraunces', serif; font-size: 64px; font-weight: 500; color: #2A1810; }
+  .results-score span { color: #7A6B5C; font-size: 32px; }
+  .results-msg { font-size: 18px; color: #5C4F42; margin-top: 8px; }
+
+  /* FOOTER */
+  footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid #E8DCC8; display: flex; justify-content: space-between; align-items: center; }
+  footer .left { font-size: 12px; color: #7A6B5C; }
+  footer .right { font-family: 'Fraunces', serif; font-style: italic; font-size: 14px; color: #8B2C24; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .fade-up { animation: fadeUp 0.35s ease-out both; }
+
+  #root { min-height: 100vh; }
+</style>
+</head>
+<body class="grain">
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState } = React;
+
+// ---------- ICONS ----------
+const Icon = ({ d, size = 16 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d={d} />
+  </svg>
+);
+const SparklesI = (p) => <svg width={p.size||14} height={p.size||14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3l1.9 5.8a2 2 0 0 0 1.3 1.3L21 12l-5.8 1.9a2 2 0 0 0-1.3 1.3L12 21l-1.9-5.8a2 2 0 0 0-1.3-1.3L3 12l5.8-1.9a2 2 0 0 0 1.3-1.3z"/></svg>;
+const ChevD = () => <Icon d="M6 9l6 6 6-6" />;
+const ChevU = () => <Icon d="M18 15l-6-6-6 6" />;
+const Arrow = () => <Icon d="M5 12h14M12 5l7 7-7 7" />;
+const CheckI = ({size}) => <svg width={size||16} height={size||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5"/></svg>;
+const XI = ({size}) => <svg width={size||16} height={size||16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>;
+const TrophyI = () => <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>;
+const RotateI = () => <Icon d="M3 12a9 9 0 1 0 9-9M3 12V4M3 12h8" />;
+
+// ---------- DATA ----------
+const VOWELS = [
+  { letter: 'a, á', desc: '"a" as in "although"  ·  "á" as in "father"', examples: [['ház', 'house'], ['ablak', 'window']] },
+  { letter: 'e, é', desc: '"e" as in "less"  ·  "é" as in "café"', examples: [['elefánt', 'elephant'], ['szép', 'beautiful']] },
+  { letter: 'i, í', desc: 'short and long "ee"', examples: [['víz', 'water']] },
+  { letter: 'o, ó', desc: 'short and long "o"', examples: [['óra', 'clock / hour']] },
+  { letter: 'u, ú', desc: 'short and long "oo"', examples: [['kutya', 'dog'], ['út', 'road']] },
+  { letter: 'ö, ő', desc: 'rounded — like German "ö"', examples: [['öröm', 'happiness'], ['nő', 'woman']] },
+  { letter: 'ü, ű', desc: 'rounded — like German "ü"', examples: [['fürdő', 'bath'], ['tűz', 'fire']] },
+];
+
+const CONSONANTS = [
+  { letter: 'cs', sound: '"ch" in "check"', ex: 'macska', tr: 'cat' },
+  { letter: 'sz', sound: '"s" in "sun"', ex: 'szoba', tr: 'room' },
+  { letter: 'zs', sound: '"s" in "pleasure"', ex: 'zseb', tr: 'pocket' },
+  { letter: 'gy', sound: '"d" in "during"', ex: 'egy', tr: 'one' },
+  { letter: 'ty', sound: 'as in "tube"', ex: 'tyúk', tr: 'hen' },
+  { letter: 'ny', sound: '"n" in "new"', ex: 'nyár', tr: 'summer' },
+  { letter: 'ly', sound: '"y" in "yes" (= j)', ex: 'folyó', tr: 'river' },
+  { letter: 'dz', sound: '"ds" in "kids"', ex: 'edzeni', tr: 'to work out' },
+  { letter: 'dzs', sound: '"j" in "juice"', ex: 'dzsungel', tr: 'jungle' },
+];
+
+const HARMONY = [
+  { type: 'Mély (Deep)', mnem: 'AUTÓ', vowels: 'a · á · o · ó · u · ú', words: [['tyúk', 'hen'], ['ágy', 'bed'], ['joghurt', 'yogurt']], cls: 'deep-pill' },
+  { type: 'Vegyes (Mixed)', mnem: 'deep + high', vowels: 'a/á/o + e/é/i', words: [['elefánt', 'elephant'], ['zsiráf', 'giraffe'], ['éjszaka', 'night']], cls: 'mixed-pill' },
+  { type: 'Magas (High)', mnem: 'TENISZÜTŐ', vowels: 'e · é · i · í · ö · ő · ü · ű', words: [['üveg', 'bottle'], ['öt', 'five'], ['internet', 'internet']], cls: 'high-pill' },
+];
+
+const QUIZ = [
+  { type: 'mc', q: 'What sound does "cs" make?', opts: ['"ch" in "check"', '"k" in "kite"', '"sh" in "shoe"'], a: 0, exp: '"cs" → "ch" in "check". Example: macska (cat).' },
+  { type: 'mc', q: 'What sound does "gy" make?', opts: ['like "g" in "gate"', 'like "d" in "during"', 'like "j" in "juice"'], a: 1, exp: 'A soft palatal sound — egy (one).' },
+  { type: 'mc', q: 'What sound does "sz" make?', opts: ['"s" in "sun"', '"sh" in "shoe"', '"z" in "zebra"'], a: 0, exp: '"sz" is the regular English "s". (Note: a lone "s" in Hungarian = "sh"!)' },
+  { type: 'mc', q: 'Is kutya (dog) deep, mixed, or high?', opts: ['Mély (Deep)', 'Vegyes (Mixed)', 'Magas (High)'], a: 0, exp: 'Both "u" and "a" are deep vowels → kutya is deep.' },
+  { type: 'mc', q: 'Is elefánt (elephant) deep, mixed, or high?', opts: ['Mély (Deep)', 'Vegyes (Mixed)', 'Magas (High)'], a: 1, exp: '"e/é" are high, but "á" is deep → mixed (vegyes).' },
+  { type: 'fill', q: 'Berlin___ élsz?', a: ['ben'], hint: '-ban / -ben / -on / -en / -ön', exp: 'Berlin is a high-vowel, non-Hungarian city → Berlinben.' },
+  { type: 'fill', q: 'Kanada___ él.', a: ['ban'], hint: '-ban / -ben', exp: 'Kanada is a deep-vowel country → Kanadában (final "a" lengthens to "á").' },
+  { type: 'fill', q: 'Magyarország___ vagyok.', a: ['on'], hint: 'careful — Hungary is special!', exp: 'Hungary and Hungarian cities use -n / -on / -en / -ön, NOT -ban/-ben → Magyarországon.' },
+  { type: 'fill', q: 'Szeged___ tanulok.', a: ['en'], hint: 'Hungarian city + linking vowel', exp: 'Szeged is a Hungarian city → -n form. High-vowel word → linking "e" → Szegeden.' },
+  { type: 'fill', q: 'London → ___', a: ['londoni'], hint: 'place of origin: add -i', exp: 'londoni = from London.' },
+  { type: 'fill', q: 'Svájc → ___', a: ['svájci'], hint: 'place of origin: add -i', exp: 'svájci = Swiss.' },
+  { type: 'fill', q: 'Beszélek magyar___ (I speak Hungarian).', a: ['ul'], hint: '-ul / -ül', exp: 'magyar is deep-vowel → -ul → magyarul.' },
+  { type: 'fill', q: 'Egy kicsit tudok török___ (a little Turkish).', a: ['ül'], hint: '-ul / -ül', exp: 'török has high/round vowels → -ül → törökül.' },
+  { type: 'mc', q: 'Mi ___ Magyarországon. (We are in Hungary.)', opts: ['vagyok', 'vagyunk', 'vannak', 'vagytok'], a: 1, exp: '"mi" (we) → vagyunk.' },
+  { type: 'mc', q: 'What does "Hány éves vagy?" mean?', opts: ["What's your name?", 'How old are you?', 'Where are you from?'], a: 1, exp: 'hány = how many · éves = years old.' },
+  { type: 'mc', q: 'What does "Milyen nemzetiségű vagy?" mean?', opts: ["What's your job?", "What's your nationality?", 'How are you?'], a: 1, exp: 'nemzetiség = nationality.' },
+];
+
+// ---------- COMPONENTS ----------
+function SectionHead({ num, hu, en }) {
+  return (
+    <div>
+      <div className="sec-head">
+        <span className="sec-num">{num}</span>
+        <div className="sec-titles">
+          <h2>{hu}</h2>
+          <p>{en}</p>
+        </div>
+      </div>
+      <div className="divider" />
+    </div>
+  );
+}
+
+function Collapsible({ title, children }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="collap">
+      <button onClick={() => setOpen(!open)}>
+        <span>{title}</span>
+        {open ? <ChevU /> : <ChevD />}
+      </button>
+      {open && <div className="collap-body">{children}</div>}
+    </div>
+  );
+}
+
+function VowelsSection() {
+  return (
+    <div className="grid-2">
+      {VOWELS.map((v, i) => (
+        <div key={i} className="card">
+          <div className="card-letter">{v.letter}</div>
+          <div className="card-desc">{v.desc}</div>
+          <div className="pills">
+            {v.examples.map(([w, t], j) => (
+              <div key={j} className="pill"><b>{w}</b><span> — {t}</span></div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ConsSection() {
+  return (
+    <div className="grid-cons">
+      {CONSONANTS.map((c, i) => (
+        <div key={i} className="card cons-card">
+          <div className="card-letter" style={{ fontSize: '28px', marginBottom: 0 }}>{c.letter}</div>
+          <div className="lbl">{c.sound}</div>
+          <div className="ex">{c.ex}</div>
+          <div className="tr">{c.tr}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function HarmonySection() {
+  return (
+    <div>
+      <p style={{ color: '#5C4F42', marginBottom: 20, lineHeight: 1.6 }}>
+        Hungarian sorts every word into one of three vowel-harmony groups. Suffixes change shape to match —
+        so knowing the group is essential before you can attach anything.
+      </p>
+      <div className="grid-3">
+        {HARMONY.map((h, i) => (
+          <div key={i} className={`harmony-card ${h.cls}`}>
+            <div className="h-eyebrow">{h.type}</div>
+            <div className="h-mnem">memoriter: {h.mnem}</div>
+            <div className="h-vowels">{h.vowels}</div>
+            <ul className="h-words">
+              {h.words.map(([w, t], j) => (
+                <li key={j}><b>{w}</b><em> — {t}</em></li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+      <div className="callout">
+        <b>Round vowels:</b> ö, ő, ü, ű — these matter for the special <em>-ön</em> suffix.
+      </div>
+    </div>
+  );
+}
+
+function LocativeSection() {
+  return (
+    <div>
+      <div className="grid-2">
+        <div className="card">
+          <div className="loc-title">-ban / -ben</div>
+          <div className="loc-sub">"in" — for most places</div>
+          <ul className="loc-list">
+            <li>Észak-Amerikáb<b>an</b> — North America</li>
+            <li>Kanadáb<b>an</b> — Canada</li>
+            <li>Waterloo<b>ban</b> — Waterloo</li>
+            <li>Velencéb<b>en</b> — Venice</li>
+          </ul>
+        </div>
+        <div className="card">
+          <div className="loc-title">-n / -on / -en / -ön</div>
+          <div className="loc-sub">"on" — Hungary, Hungarian cities, islands</div>
+          <ul className="loc-list">
+            <li>Magyarország<b>on</b></li>
+            <li>Budapest<b>en</b>, Szeged<b>en</b></li>
+            <li>a világ<b>on</b> — in the world</li>
+            <li>Cipru<b>son</b>, Máltá<b>n</b> — islands</li>
+          </ul>
+        </div>
+      </div>
+      <div style={{ marginTop: 16 }}>
+        <Collapsible title="The vowel-lengthening trick (a → á, e → é)">
+          <p>When a word ends in <b>a</b> or <b>e</b>, the vowel lengthens before the suffix:</p>
+          <ul>
+            <li>Afrika → Afrik<b>á</b>ban</li>
+            <li>Anglia → Angli<b>á</b>ban</li>
+            <li>Velence → Velenc<b>é</b>ben</li>
+            <li>Chile → Chil<b>é</b>ben</li>
+          </ul>
+        </Collapsible>
+        <Collapsible title="How to choose the right form">
+          <ul>
+            <li><b>Deep-vowel word</b> → -ban (e.g. Kanadában)</li>
+            <li><b>High-vowel word</b> → -ben (e.g. Berlinben)</li>
+            <li><b>Round-vowel last syllable</b> → -ön (e.g. fürdőn)</li>
+            <li><b>Compound word</b> → harmony of the LAST element</li>
+          </ul>
+        </Collapsible>
+      </div>
+    </div>
+  );
+}
+
+function OriginSection() {
+  const items = [
+    { cat: 'Continent', ex: ['Európa → európai', 'Ázsia → ázsiai', 'Afrika → afrikai'], note: 'Exception: Ausztrália → ausztrál' },
+    { cat: 'Country', ex: ['Svájc → svájci', 'Kanada → kanadai', 'Egyiptom → egyiptomi'], note: '' },
+    { cat: 'City', ex: ['Szeged → szegedi', 'London → londoni', 'Párizs → párizsi'], note: '' },
+  ];
+  return (
+    <div>
+      <p style={{ color: '#5C4F42', marginBottom: 20, lineHeight: 1.6 }}>
+        To say "from somewhere" or describe origin, just add <b style={{color:'#8B2C24'}}>-i</b> to the place name.
+      </p>
+      <div className="grid-3">
+        {items.map((it, i) => (
+          <div key={i} className="card">
+            <div className="loc-sub">{it.cat}</div>
+            <ul style={{ listStyle: 'none', marginTop: 8, fontSize: 14 }}>
+              {it.ex.map((e, j) => <li key={j} style={{ marginBottom: 4 }}>{e}</li>)}
+            </ul>
+            {it.note && <p style={{ fontSize: 12, fontStyle: 'italic', color: '#8B2C24', marginTop: 12 }}>{it.note}</p>}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function LangSection() {
+  const langs = [
+    ['magyar', 'magyarul'], ['angol', 'angolul'], ['koreai', 'koreaiul'], ['német', 'németül'],
+    ['török', 'törökül'], ['kínai', 'kínaiul'], ['lengyel', 'lengyelül'], ['dán', 'dánul'],
+  ];
+  return (
+    <div>
+      <p style={{ color: '#5C4F42', marginBottom: 20, lineHeight: 1.6 }}>
+        <b style={{color:'#8B2C24'}}>-ul / -ül</b> turns a noun (especially a language or nationality) into an adverb —
+        meaning "in [language]" or "in a [way]". Choose by vowel harmony.
+      </p>
+      <div className="grid-4">
+        {langs.map(([base, full], i) => (
+          <div key={i} className="card" style={{ textAlign: 'center', padding: 12 }}>
+            <div style={{ fontSize: 12, color: '#7A6B5C' }}>{base}</div>
+            <div style={{ fontFamily: 'Fraunces, serif', fontSize: 18, color: '#8B2C24', fontWeight: 500, marginTop: 2 }}>{full}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ToBeSection() {
+  const rows = [
+    ['én', 'I', 'vagyok', 'mi', 'we', 'vagyunk'],
+    ['te / Ön', 'you (s.)', 'vagy / —', 'ti / Önök', 'you (pl.)', 'vagytok / —'],
+    ['ő', 'he/she', 'van *', 'ők', 'they', 'vannak *'],
+  ];
+  return (
+    <div>
+      <div className="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Pronoun</th><th className="muted">English</th><th className="accent">to be</th>
+              <th>Pronoun</th><th className="muted">English</th><th className="accent">to be</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r, i) => (
+              <tr key={i}>
+                {r.map((c, j) => <td key={j} className={(j===2||j===5) ? 'bold' : ''}>{c}</td>)}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p className="table-note">
+        * <b>van</b> and <b>vannak</b> are dropped when describing identity, profession, or qualities —
+        e.g. "Anna tanár." (Anna is a teacher.) But kept for location: "Anna itt <em>van</em>." (Anna is here.)
+      </p>
+    </div>
+  );
+}
+
+function FunctionsSection() {
+  const fns = [
+    ['Ki vagy?', 'Who are you?', 'Martin vagyok.'],
+    ['Mi vagy? / Mivel foglalkozol?', 'What do you do?', 'Mérnök vagyok.'],
+    ['Mi ez / az?', 'What is this / that?', 'Ez egy város.'],
+    ['Hány éves vagy?', 'How old are you?', 'Huszonkét éves vagyok.'],
+    ['Milyen nemzetiségű vagy?', "What's your nationality?", 'Német vagyok.'],
+    ['Milyen Magyarország?', 'What is Hungary like?', 'Magyarország kicsi.'],
+  ];
+  return (
+    <div className="grid-2">
+      {fns.map(([q, en, a], i) => (
+        <div key={i} className="card fn-card">
+          <div className="fn-q">{q}</div>
+          <div className="fn-en">{en}</div>
+          <div className="fn-a"><span>→ </span>{a}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ---------- QUIZ ----------
+function Quiz() {
+  const [idx, setIdx] = useState(0);
+  const [selected, setSelected] = useState(null);
+  const [text, setText] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+  const [score, setScore] = useState(0);
+  const [done, setDone] = useState(false);
+
+  const q = QUIZ[idx];
+  const total = QUIZ.length;
+
+  const isFillCorrect = () => {
+    const clean = text.trim().toLowerCase().replace(/[.!?]/g, '');
+    return q.a.some(ans => ans.toLowerCase() === clean);
+  };
+
+  const submit = () => {
+    const correct = q.type === 'mc' ? selected === q.a : isFillCorrect();
+    if (correct) setScore(s => s + 1);
+    setSubmitted(true);
+  };
+
+  const next = () => {
+    if (idx + 1 >= total) setDone(true);
+    else { setIdx(idx + 1); setSelected(null); setText(''); setSubmitted(false); }
+  };
+
+  const restart = () => { setIdx(0); setSelected(null); setText(''); setSubmitted(false); setScore(0); setDone(false); };
+
+  if (done) {
+    const pct = Math.round((score / total) * 100);
+    let msg = '';
+    if (pct === 100) msg = "Tökéletes! Perfect — you've mastered the first lesson.";
+    else if (pct >= 80) msg = 'Nagyon jó! Very strong work.';
+    else if (pct >= 60) msg = "Jól csinálod. Good — review the tricky bits and you've got it.";
+    else msg = "Don't worry — review the lesson and try again. Hungarian rewards patience.";
+    return (
+      <div className="results">
+        <TrophyI />
+        <div className="results-score">{score}<span>/{total}</span></div>
+        <p className="results-msg">{msg}</p>
+        <button onClick={restart} className="btn-ghost" style={{ marginTop: 24 }}><RotateI /> Try again</button>
+      </div>
+    );
+  }
+
+  const correct = q.type === 'mc' ? selected === q.a : isFillCorrect();
+  const canSubmit = q.type === 'mc' ? selected !== null : text.trim().length > 0;
+
+  return (
+    <div className="fade-up" key={idx}>
+      <div className="quiz-meta">
+        <span>Question <b>{idx + 1}</b> of {total}</span>
+        <span>Score: <b>{score}</b></span>
+      </div>
+      <div className="progress"><div className="progress-bar" style={{ width: `${(idx/total)*100}%` }} /></div>
+      <h3 className="quiz-q">{q.q}</h3>
+
+      {q.type === 'mc' && (
+        <div className="opts">
+          {q.opts.map((opt, i) => {
+            let cls = 'opt';
+            if (submitted) {
+              if (i === q.a) cls += ' correct';
+              else if (i === selected) cls += ' wrong';
+              else cls += ' dim';
+            } else if (selected === i) cls += ' selected';
+            return (
+              <button key={i} disabled={submitted} onClick={() => setSelected(i)} className={cls}>
+                <span>{opt}</span>
+                {submitted && i === q.a && <CheckI size={20} />}
+                {submitted && i === selected && i !== q.a && <XI size={20} />}
+              </button>
+            );
+          })}
+        </div>
+      )}
+
+      {q.type === 'fill' && (
+        <div>
+          <input
+            type="text"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            disabled={submitted}
+            onKeyDown={(e) => { if (e.key === 'Enter' && canSubmit && !submitted) submit(); }}
+            placeholder="Type your answer…"
+            className={`fill-input ${submitted ? (correct ? 'correct' : 'wrong') : ''}`}
+            autoFocus
+          />
+          {q.hint && !submitted && <p className="hint">hint: {q.hint}</p>}
+        </div>
+      )}
+
+      {submitted && (
+        <div className={`feedback ${correct ? 'ok' : 'no'}`}>
+          {correct ? <CheckI size={20} /> : <XI size={20} />}
+          <div>
+            <div className="ttl">
+              {correct ? 'Helyes! (Correct)' : `Nem egészen. Answer: ${q.type === 'fill' ? q.a[0] : q.opts[q.a]}`}
+            </div>
+            <div className="exp">{q.exp}</div>
+          </div>
+        </div>
+      )}
+
+      <div className="quiz-actions">
+        {!submitted ? (
+          <button onClick={submit} disabled={!canSubmit} className="btn-primary">Check <Arrow /></button>
+        ) : (
+          <button onClick={next} className="btn-primary">{idx + 1 >= total ? 'See results' : 'Next'} <Arrow /></button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ---------- APP ----------
+function App() {
+  const [view, setView] = useState('lesson');
+  return (
+    <div className="container">
+      <header>
+        <div className="eyebrow"><SparklesI /> <span>Magyar · Hungarian</span></div>
+        <h1 className="title">Első lecke</h1>
+        <p className="subtitle">First lesson — sounds, vowel harmony, basic suffixes & "to be"</p>
+        <div className="tabs">
+          <button className={`tab ${view==='lesson'?'active':''}`} onClick={() => setView('lesson')}>Lesson</button>
+          <button className={`tab ${view==='quiz'?'active':''}`} onClick={() => setView('quiz')}>Quiz</button>
+        </div>
+      </header>
+
+      {view === 'lesson' && (
+        <main className="fade-up">
+          <section className="lesson-sec"><SectionHead num="01" hu="Magánhangzók" en="The vowels" /><VowelsSection /></section>
+          <section className="lesson-sec"><SectionHead num="02" hu="Mássalhangzók" en="Compound consonants" /><ConsSection /></section>
+          <section className="lesson-sec"><SectionHead num="03" hu="Hangrend" en="Vowel harmony" /><HarmonySection /></section>
+          <section className="lesson-sec"><SectionHead num="04" hu="Hol vagy?" en="Locative suffixes — 'in' / 'on'" /><LocativeSection /></section>
+          <section className="lesson-sec"><SectionHead num="05" hu="Honnan jössz?" en="Place of origin: -i" /><OriginSection /></section>
+          <section className="lesson-sec"><SectionHead num="06" hu="-ul / -ül" en="Languages & manner" /><LangSection /></section>
+          <section className="lesson-sec"><SectionHead num="07" hu="Lenni" en="To be — pronouns & conjugation" /><ToBeSection /></section>
+          <section className="lesson-sec"><SectionHead num="08" hu="Funkciók" en="Question forms & answers" /><FunctionsSection /></section>
+          <div className="cta">
+            <p className="cta-line">Készen állsz?<span>Ready?</span></p>
+            <button onClick={() => setView('quiz')} className="btn-primary">Take the quiz <Arrow /></button>
+          </div>
+        </main>
+      )}
+      {view === 'quiz' && <main className="quiz-box"><Quiz /></main>}
+
+      <footer>
+        <span className="left">Első lecke · Hungarian foundations</span>
+        <span className="right">Sok szerencsét!</span>
+      </footer>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

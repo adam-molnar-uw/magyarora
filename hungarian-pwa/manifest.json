@@ -1,0 +1,21 @@
+{
+  "name": "Magyaróra — Hungarian Lessons",
+  "short_name": "Magyaróra",
+  "description": "Personal Hungarian language study app with weekly lessons, quizzes, and spaced repetition.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FAF5EF",
+  "theme_color": "#8B2C24",
+  "categories": ["education", "productivity"],
+  "lang": "en",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
